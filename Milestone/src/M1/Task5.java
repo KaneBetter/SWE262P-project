@@ -1,13 +1,6 @@
-
-import org.dom4j.Document;
-import org.dom4j.io.SAXReader;
 import org.json.*;
-
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 

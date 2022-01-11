@@ -13,3 +13,4 @@ git push origin * #the branch that you want to push, for example git push origin
 git pull origin master
 ```
 
+[Milestone Readme File](https://github.com/tonychen257/SWE262P-project/blob/main/Milestone/src/M1/README.md)

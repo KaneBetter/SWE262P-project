@@ -13,7 +13,9 @@
           <root url="file:///Library/Java/Extensions" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.ideaLibSources/json-20211205-sources.jar!/" />
+        </SOURCES>
         <jarDirectory url="file:///Library/Java/Extensions" recursive="false" />
       </library>
     </orderEntry>

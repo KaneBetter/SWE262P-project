@@ -1,18 +1,9 @@
 import org.json.*;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 public class Task4 {
     public static void main(String[] args) throws FileNotFoundException {
-        //String xmlPath = args[0]; //"doc/books.xml"
-        //SAXReader reader = new SAXReader();
-        //Document xmlDocument = reader.read(new File(xmlPath));
-        //String xmlData = xmlDocument.asXML();
-        //JSONArray object = JSONML.toJSONArray(xmlData);
-//
-
-
         String xmlPath = args[0];
         FileReader reader = new FileReader(xmlPath);
         XMLTokener xmlTokener = new XMLTokener(reader);
@@ -25,7 +16,7 @@ public class Task4 {
         if (jsonArray.isEmpty()) {
             return;
         }
-        int i = 1;
+        int i = 0;
         while (i < jsonArray.length()) {
             try {
                 if (!jsonArray.get(0).toString().contains("swe262_")) {
