@@ -1,15 +1,17 @@
-# SWE262P-project
+# Week 1
+### Assigment Description
+Use one stop_words file and one data file to calculate the top 25 term frequency in the document.
 
-Github repo for SWE 262P Programming Styles Project.
+### How to run the program
+In order to run the `TermFrequency.java` program, we need to do following steps:
 
-Group member: Kaiqin Chen, Ruiyan Ma
+1. Use either Console or Shell and go to the dir using `cd Week1`.
+1. Compile Java using `javac TermFrequency.java`.
+2. Run the program with one input using `java TermFrequency ../pride-and-prejudice.txt`.
+- [Source Code]
+(https://replit.com/@tonychen257/SWE262PJava#Week1/TermFrequency.java)
 
-[Milestone Readme File](https://github.com/tonychen257/SWE262P-project/blob/main/Milestone/src/M1/README.md)
-
-
-
-
-
+# Week 2
 ## Four - Monolith Style Code
 
 - No abstractions
@@ -61,4 +63,3 @@ cd Week2
 javac Six.java
 java Six ../pride-and-prejudice.txt
 ```
-
