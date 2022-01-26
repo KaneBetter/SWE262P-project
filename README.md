@@ -6,9 +6,9 @@ Group member: Kaiqin Chen, Ruiyan Ma
 
 [Milestone Readme File](https://github.com/tonychen257/SWE262P-project/blob/main/Milestone/src/M1/README.md)
 
+[Milestone2](https://github.com/tonychen257/SWE262P-project/blob/main/Milestone2_README.md)
 
-
-
+[Milestone Fork Repo](https://github.com/tonychen257/JSON-java)
 
 ## Four - Monolith Style Code
 
