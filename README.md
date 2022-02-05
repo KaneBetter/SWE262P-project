@@ -1,5 +1,9 @@
 > Group Member: Kaiqin Chen, Ruiyan Ma
 
+# SWE262P Milestone1
+
+- [Link](https://github.com/tonychen257/SWE262P-project/blob/main/Milestone1/src/M1/README.md)
+
 # SWE262P Milestone2
 
 ## Implement thoughts
@@ -28,8 +32,6 @@
    - Simple idea for Task1 is when we found the close tag for stopWord, we immediately stop the recursion by set `pathFind` to  `True`
    - Simple idea fro Task2 is when we found the replace token's close tag, we give `replacePathFind` to `True`, so that in the next recursion will replace the JSONObject, and we use `hasReplaced` to make sure that replace element only happen once. For this task, we do not break the recursion.
 
-
-
 ## Unit Test
 
 We create 4 tests.
@@ -53,7 +55,7 @@ Given replacement: {"street":"Ave of the Arts"}
 
 ## Performance
 
-For the task1, we manage to stop recursive when we find the sub object, we think it save a lot of time.
+For the task1, we manage to stop recursive when we find the sub object, we think it save a lot of time. For example, if you try to find the first object in 1000 object, with milestone2 we only need to go the first object and return and with milestone1 we need to recursively go through all the object.
 
 # SWE262P Milestone3
 
@@ -106,6 +108,6 @@ We will try to rewrite milestone2's unit test in the future with `Junit` to main
 
 ##  Performance
 
-We think for the milestone2 we did a lot of improvement in the performance. For this mission, we always need to traverse the whole XML. However, in milestone1, we need to do it twice. First we traverse to get the XML to JSON, and then the client need do another traverse to change the key.
+We think for the milestone3 we did a lot of improvement in the performance. For this mission, we always need to traverse the whole XML. However, in milestone1, we need to do it twice. First we traverse to get the XML to JSON, and then the client need do another traverse to change the key.
 
-In the milestone2, by using of Functions provided by JAVA 8 and the lambda expressions, we made the retrvise only happen once. For detail implementation, we built our function on the top of the original parse function with little adjustments.
+In the milestone3, by using of Functions provided by JAVA 8 and the lambda expressions, we made the retrvise only happen once. For detail implementation, we built our function on the top of the original parse function with little adjustments.
