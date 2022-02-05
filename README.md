@@ -1,64 +1,111 @@
-# SWE262P-project
+> Group Member: Kaiqin Chen, Ruiyan Ma
 
-Github repo for SWE 262P Programming Styles Project.
+# SWE262P Milestone2
 
-Group member: Kaiqin Chen, Ruiyan Ma
+## Implement thoughts
 
-[Milestone Readme File](https://github.com/tonychen257/SWE262P-project/blob/main/Milestone/src/M1/README.md)
+1. add two more function
 
-[Milestone2](https://github.com/tonychen257/SWE262P-project/blob/main/Milestone2_README.md)
+   ```java
+   public static JSONObject toJSONObject(Reader reader, JSONPointer path) {}
+   private static boolean parseMile2(XMLTokener x, JSONObject context, String name, XMLParserConfiguration config, String stopKey) {}
+   ```
 
-[Milestone Fork Repo](https://github.com/tonychen257/JSON-java)
+2. Create two global value to track the process
 
-## Four - Monolith Style Code
+   ```java
+       // global values for milestone2 task1
+       static boolean pathFind = false;
+       static int reachIndex = -1; // this is for JSONArray, example books/2
+   	
+   	 // global values for milestone2 task2
+   	 static boolean replacePathFind = false;
+       static int replaceIndex = -1;
+       static boolean hasReplaced = false; //make sure only replace once
+   ```
 
-- No abstractions
-- No use of library functions
+3. Function details can be found in the XML.java
+   - Simple idea for Task1 is when we found the close tag for stopWord, we immediately stop the recursion by set `pathFind` to  `True`
+   - Simple idea fro Task2 is when we found the replace token's close tag, we give `replacePathFind` to `True`, so that in the next recursion will replace the JSONObject, and we use `hasReplaced` to make sure that replace element only happen once. For this task, we do not break the recursion.
 
-### Instruction to run the code
 
-```bash
-cd Week2
-javac Four.java
-java Four ../pride-and-prejudice.txt
-```
 
-## Five - Cookbook Style Code
+## Unit Test
 
-- Larger problem decomposed in procedural abstractions
-- Larger problem solved as a sequence of commands, each corresponding to a procedure
-
-```python
-read_file(sys.argv[1])
-filter_chars_and_normalize()
-scan()
-remove_stop_words()
-frequencies()
-sort()
-```
-
-### Instruction to run the code
+We create 4 tests.
 
 ```bash
-cd Week2
-javac Five.java
-java Five ../pride-and-prejudice.txt
+# Path: "/contact/address"
+{"address":{"zipcode":92611,"street":"Ave of Nowhere"}}
+-----------------------
+# Path: "/contact/address/street"
+Given replacement: {"street":"Ave of the Arts"}
+{"contact":{"nick":"Crista","address":{"zipcode":92611,"street":"Ave of the Arts"},"name":"Crista Lopes"}}
+-----------------------
+# Path: "/employee/contact/1"
+{"nick":"KC","address":{"zipcode":92614,"street":"Irvine"},"name":"Chen"}
+-----------------------
+# Path: "/contact/address/street/2"
+# for the last one we have not figure how to fix it with JSONArray, we might do it in the future update
+Given replacement: {"street":"Ave of the Arts"}
+{"employee":{"contact":[{"nick":"Crista","address":{"zipcode":92611,"street":["Ave of the Arts","Ave of Two","Ave of Three"]},"name":"Crista Lopes"},{"nick":"KC","address":{"zipcode":92614,"street":"Irvine"},"name":"Chen"}]}}
 ```
 
-## Six - Pipeline Style Code
+## Performance
 
-- Larger problem decomposed in functional abstractions. Functions, according to Mathematics, are relations from inputs to outputs.
-- Larger problem solved as a pipeline of function applications
+For the task1, we manage to stop recursive when we find the sub object, we think it save a lot of time.
 
-```python
-print_all(sort(frequencies(remove_stop_words(scan(filter_chars_and_normalize(read_file(sys.argv[1]))))))[0:25])
+# SWE262P Milestone3
+
+## Implement thoughts
+
+- Add two more function
+
+```java
+public static JSONObject toJSONObject(Reader reader, Function keyTransformer) {}
+private static boolean parseMile3(XMLTokener x, JSONObject context, String name, XMLParserConfiguration config, Function keyTransformer) {}
 ```
 
-### Instruction to run the code
+- `parseMile3` function is built based on the original `parse` function. We just need to apply the `keyTransformer` function every time when `parse	` function try to use `accumulate` method to expand the result. For example, we change the line1 to line2. In this way, we can make sure every `Tag` or `TagName` will be applied by the `keyTransformer` function.
 
-```bash
-cd Week2
-javac Six.java
-java Six ../pride-and-prejudice.txt
+```java
+context.accumulate(config.getcDataTagName(), string);
+context.accumulate((String) keyTransformer.apply(config.getcDataTagName()), string);
 ```
 
+## Unit Test
+
+In the milestone3, we began to utilize `Junit` as our test tool.
+
+```java
+    @Test
+    public void testMileStone3Fun1() throws FileNotFoundException {
+        File file = new File("./src/books.xml");
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+
+        Function<String, String> func = x -> "swe_262P_"+x;
+
+        JSONObject jobj = XML.toJSONObject(br,func);
+        System.out.println(jobj.toString(2));
+    }
+    @Test
+    public void testMileStone3Fun2() throws FileNotFoundException {
+        File file = new File("./src/books.xml");
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+
+        Function<String, String> func = x -> new StringBuilder(x).reverse().toString();
+
+        JSONObject jobj = XML.toJSONObject(br,func);
+        System.out.println(jobj.toString(2));
+    }
+```
+
+We will try to rewrite milestone2's unit test in the future with `Junit` to maintain the consistency.
+
+##  Performance
+
+We think for the milestone2 we did a lot of improvement in the performance. For this mission, we always need to traverse the whole XML. However, in milestone1, we need to do it twice. First we traverse to get the XML to JSON, and then the client need do another traverse to change the key.
+
+In the milestone2, by using of Functions provided by JAVA 8 and the lambda expressions, we made the retrvise only happen once. For detail implementation, we built our function on the top of the original parse function with little adjustments.
