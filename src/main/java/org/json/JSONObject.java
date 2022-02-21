@@ -474,7 +474,7 @@ public class JSONObject {
 
     public Stream<JSONNode> toStream() {
         List<JSONNode> nodes = new ArrayList<>();
-        nodes = addAllNodes("",this,  new ArrayList<JSONNode>());
+        nodes = addAllNodes("", this, new ArrayList<JSONNode>());
         return nodes.stream();
     }
 

@@ -116,9 +116,9 @@ In the milestone3, by using of Functions provided by JAVA 8 and the lambda expre
 
 ## Implement thoughts
 
-We think `JSONObject` as a tree not the `HashMap`. So when we want to traverse a tree we use recursive method to do that.
+We think `JSONObject` as a tree not a `HashMap`. When we want to traverse a tree, we do it recursively
 
-In detail, we have to deal with several question.
+In detail, we have to deal with several questions.
 
 1. What attributes are required for this node?
 
