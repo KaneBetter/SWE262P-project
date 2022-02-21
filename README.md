@@ -111,3 +111,40 @@ We will try to rewrite milestone2's unit test in the future with `Junit` to main
 We think for the milestone3 we did a lot of improvement in the performance. For this mission, we always need to traverse the whole XML. However, in milestone1, we need to do it twice. First we traverse to get the XML to JSON, and then the client need do another traverse to change the key.
 
 In the milestone3, by using of Functions provided by JAVA 8 and the lambda expressions, we made the retrvise only happen once. For detail implementation, we built our function on the top of the original parse function with little adjustments.
+
+# SWE262P Milestone4
+
+## Implement thoughts
+
+We think `JSONObject` as a tree not the `HashMap`. So when we want to traverse a tree we use recursive method to do that.
+
+In detail, we have to deal with several question.
+
+1. What attributes are required for this node?
+
+2. What are the params of the recursive function?
+
+3. When should we add the node into list?
+
+4. What should we do with `JSONArray` Object?
+
+   ...
+
+Step by step, we break the challenge into small pieces to solve the problem by create a new class named `JSONNode` and two new methods in `JSONObject.java` file called `toStream()` and `addAllNodes()`
+
+```java
+public Stream<JSONNode> toStream() {}
+private List<JSONNode> addAllNodes(String p, JSONObject jb, ArrayList<JSONNode> nodes) {}
+```
+
+## Unit Test
+
+We begin to use `assertTrue ` to test our function. We write out test cases in `/test/java/MilestoneTest.java`
+
+```java
+public void testMileStone4() {}
+```
+
+## Performance
+
+When we turn a `JSONObject` into a `Stream` Object, we open a whole new world for the object. Because once it turned, it can utilize all the APIs in `Stream`, for example, `map`, `filter`, `collector`, `flatmap`, `foreach` etc.

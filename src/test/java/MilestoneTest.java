@@ -1,10 +1,15 @@
 import java.io.*;
+import java.util.List;
 import java.util.function.Function;
-
-import org.json.JSONException;
-import org.json.JSONPointer;
-import org.json.JSONObject;
-import org.json.XML;
+import java.util.stream.Collectors;
+import org.json.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 public class MilestoneTest {
@@ -103,5 +108,40 @@ public class MilestoneTest {
 
         JSONObject jobj = XML.toJSONObject(br,func);
         System.out.println(jobj.toString(2));
+    }
+
+    @Test
+    public void testMileStone4() {
+        JSONObject obj = XML.toJSONObject("<Books><book><title>AAA</title><author>ASmith</author></book><book><title>BBB</title><author>BSmith</author></book></Books>");
+        //test the stream content
+        List<JSONNode> jsonNodeStream = obj.toStream().collect(Collectors.toList());
+        assertEquals(jsonNodeStream.size(), 8);
+        for (int i = 0; i < jsonNodeStream.size(); i++) {
+            System.out.println(jsonNodeStream.get(i));
+        }
+        System.out.println("------------------");
+
+        //obj.toStream().forEach(node -> do some transformation, possibly based on the path of the node);
+        obj.toStream().forEach(node -> {
+            if (node.path.contains("title")) {
+                System.out.println(node.toString());
+            }
+        });
+        System.out.println("------------------");
+
+        //List<String> titles = obj.toStream().map(node -> extract value for key "title").collect(Collectors.toList());
+        List<String> titles = obj.toStream().filter(node -> node.path.contains("title"))
+                        .map(node -> node.value.toString())
+                        .collect(Collectors.toList());
+        assertEquals(titles.size(), 2);
+        System.out.println(titles.get(0));
+        System.out.println(titles.get(1));
+        System.out.println("------------------");
+
+        //obj.toStream().filter(node -> node with certain properties).forEach(node -> do some transformation);
+        obj.toStream().filter(node -> node.key.equals("author"))
+                .forEach(node -> {
+                    System.out.println(node.value.toString().replace("Smith", "Sean"));
+                });
     }
 }

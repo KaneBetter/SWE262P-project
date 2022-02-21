@@ -36,18 +36,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * A JSONObject is an unordered collection of name/value pairs. Its external
@@ -466,6 +458,64 @@ public class JSONObject {
      */
     protected JSONObject(int initialCapacity){
         this.map = new HashMap<String, Object>(initialCapacity);
+    }
+
+    /**
+     * Milestone4
+     * Add streaming methods to the library that allow the client code to chain operations on JSON nodes.
+     * If we treat JSONObject like a tree, then we need traversal all the node and collect as a list.
+     * We choose every element independent of nesting because it is more reasonable.
+     */
+
+    /**
+     * Method creates JSONNode object for every key value(Object) pair and store their whole top-down path
+     * @return Stream of JSONNodes
+     */
+
+    public Stream<JSONNode> toStream() {
+        List<JSONNode> nodes = new ArrayList<>();
+        nodes = addAllNodes("",this,  new ArrayList<JSONNode>());
+        return nodes.stream();
+    }
+
+    /**
+     * Method addAllNodes use recursively to add Node.
+     * @param jb
+     * @param p
+     * @param nodes
+     * @return
+     */
+
+    private List<JSONNode> addAllNodes(String p, JSONObject jb, ArrayList<JSONNode> nodes) {
+        if (jb.isEmpty()) {
+            return nodes;
+        }
+        for (String key : jb.keySet()) {
+            String path = p;
+            JSONNode node = null;
+            Object value = jb.get(key);
+
+            path += "/" + key;
+            node = new JSONNode(path, key, value);
+            nodes.add(node);
+
+            if (value instanceof JSONObject) {
+                addAllNodes(path, (JSONObject) value, nodes);
+            }
+
+            if (value instanceof JSONArray) {
+                JSONArray jsonArray = (JSONArray) value;
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    String prevPath = path; // for backtracking the path
+                    path += "/" + i;
+                    node = new JSONNode(path, key, jsonArray.get(i));
+                    nodes.add(node);
+                    addAllNodes(path, (JSONObject) jsonArray.get(i), nodes);
+                    path = prevPath;
+                }
+            }
+        }
+        return nodes;
     }
 
     /**
