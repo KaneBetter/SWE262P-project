@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.json.*;
@@ -143,5 +145,93 @@ public class MilestoneTest {
                 .forEach(node -> {
                     System.out.println(node.value.toString().replace("Smith", "Sean"));
                 });
+    }
+
+
+    /**
+     * Milestone5 testcases
+     */
+
+    @Test
+    public void testAsyncJSONKeyTransform() throws Exception {
+        File file = new File("./src/books.xml");
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+
+        Function<String, String> func = x -> "swe_262P"+x;
+        Future<JSONObject> futureObject	= XML.toJSONObjectM5(br, func);
+        System.out.println("Now we have the Future JSONObject.");
+
+        while(!futureObject.isDone()) {
+            Thread.sleep(1);
+            System.out.println("        Waiting for available JSONObject.");
+        }
+        JSONObject obj = futureObject.get();
+        System.out.println("Now we have the JSONObject.");
+        System.out.println(obj.toString(2));
+    }
+
+    @Test
+    public void testAsyncJSON() throws Exception {
+        File file = new File("./src/books.xml");
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+
+        Function<String, String> func = x -> "swe_262P"+x;
+        Future<JSONObject> futureObject	= XML.toJSONObjectM5(br);
+        System.out.println("Now we have the Future JSONObject.");
+
+        while(!futureObject.isDone()) {
+            Thread.sleep(1);
+            System.out.println("        Waiting for available JSONObject.");
+        }
+        JSONObject obj = futureObject.get();
+        System.out.println("Now we have the JSONObject.");
+        System.out.println(obj.toString(2));
+    }
+
+    @Test
+    public void testAsyncJSONKeyTransformWithJSONException() throws Exception {
+        File file = new File("./src/books1.xml");
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+
+        Function<String, String> func = x -> "swe_262P"+x;
+        Future<JSONObject> futureObject	= XML.toJSONObjectM5(br, func);
+        System.out.println("Now we have the Future JSONObject.");
+        try {
+            while(!futureObject.isDone()) {
+                Thread.sleep(1);
+                System.out.println("        Waiting for available JSONObject.");
+            }
+            JSONObject obj = futureObject.get();
+            System.out.println("Now we have the JSONObject.");
+            System.out.println(obj.toString(2));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    @Test
+    public void testAsyncJSONWithWriter() throws Exception {
+        File file = new File("./src/books.xml");
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+
+        Future<JSONObject> futureObject	= XML.toJSONObjectM5(br);
+        System.out.println("Now we have the Future JSONObject.");
+        try {
+            while(!futureObject.isDone()) {
+                Thread.sleep(1);
+                System.out.println("        Waiting for available JSONObject.");
+            }
+            JSONObject obj = futureObject.get();
+            Writer writer = new FileWriter("./src/book.json");
+            obj.write(writer);
+            writer.close();
+            System.out.println("Now we have the JSONObject.");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }

@@ -30,6 +30,10 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.Function;
 
 
@@ -1381,6 +1385,35 @@ public class XML {
         }
     }
 
+
+    /**
+     * milestone5
+     * Add asynchronous methods to the library that allow the client code to proceed,
+     * while specifying what to do when the JSONObject becomes available.
+     * This is useful for when reading very large files.
+     */
+
+    //In Java, when we declare a field static, exactly a single copy of that field is created and shared among all instances of that class.
+    //creates an Executor that uses a single worker thread operating off an unbounded queue.
+    static ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    public static Future<JSONObject> toJSONObjectM5(Reader reader, Function keyTransformer) {
+        Future<JSONObject> objectFuture = executorService.submit(() -> {
+            return XML.toJSONObject(reader, keyTransformer);
+        });
+
+        executorService.shutdown();
+        return objectFuture;
+    }
+
+    public static Future<JSONObject> toJSONObjectM5(Reader reader) {
+        Future<JSONObject> objectFuture = executorService.submit(() -> {
+            return XML.toJSONObject(reader);
+        });
+
+        executorService.shutdown();
+        return objectFuture;
+    }
 
 
 

@@ -148,3 +148,43 @@ public void testMileStone4() {}
 ## Performance
 
 When we turn a `JSONObject` into a `Stream` Object, we open a whole new world for the object. Because once it turned, it can utilize all the APIs in `Stream`, for example, `map`, `filter`, `collector`, `flatmap`, `foreach` etc.
+
+# SWE262P Milestone5
+
+## Implement thoughts
+
+We implement asynchronous methods with `Java Future`. When the asynchronous task is created, a Java `Future` object is returned. And use ExecutorService to submit the tasks.
+
+[./Json/XML.java](https://github.com/tonychen257/SWE262P-project/blob/main/src/main/java/org/json/XML.java)
+
+```java
+static ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+public static Future<JSONObject> toJSONObjectM5(Reader reader, Function keyTransformer) {
+    Future<JSONObject> objectFuture = executorService.submit(() -> {
+        return XML.toJSONObject(reader, keyTransformer);
+    });
+    executorService.shutdown();
+    return objectFuture;
+}
+public static Future<JSONObject> toJSONObjectM5(Reader reader) {
+    Future<JSONObject> objectFuture = executorService.submit(() -> {
+        return XML.toJSONObject(reader);
+    });
+    executorService.shutdown();
+    return objectFuture;
+}
+```
+
+## Unit Test
+
+```java
+public void testAsyncJSONKeyTransform() throws Exception {}
+public void testAsyncJSON() throws Exception {}
+public void testAsyncJSONKeyTransformWithJSONException() throws Exception{}
+public void testAsyncJSONWithWriter() throws Exception {}
+```
+
+## Performance
+
+In Java, when we declare a field `static`, exactly a single copy of that field is created and shared among all instances of that class. We creates an `Executor` that uses a single worker thread operating off an unbounded queue.
