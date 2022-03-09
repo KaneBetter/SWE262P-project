@@ -30,10 +30,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 import java.util.function.Function;
 
 
@@ -1392,6 +1389,21 @@ public class XML {
      * while specifying what to do when the JSONObject becomes available.
      * This is useful for when reading very large files.
      */
+    static ExecutorService pool = Executors.newCachedThreadPool();
+
+    public static void toJSONObjectAsync(Reader reader, Function f, Function exp) throws ExecutionException, InterruptedException {
+        pool.execute(() -> {
+            try {
+                System.out.println("Start processing " + Thread.currentThread().getName());
+                JSONObject obj = toJSONObject(reader);
+                f.apply(obj);
+                System.out.println("Done processing " + Thread.currentThread().getName());
+            } catch (Exception e) {
+                exp.apply(e);
+            }
+        });
+    }
+
 
     //In Java, when we declare a field static, exactly a single copy of that field is created and shared among all instances of that class.
     //creates an Executor that uses a single worker thread operating off an unbounded queue.
@@ -1677,4 +1689,5 @@ public class XML {
                         + ">" + string + "</" + tagName + ">";
 
     }
+
 }

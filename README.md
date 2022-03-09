@@ -153,6 +153,8 @@ When we turn a `JSONObject` into a `Stream` Object, we open a whole new world fo
 
 ## Implement thoughts
 
+### With Java Future
+
 We implement asynchronous methods with `Java Future`. When the asynchronous task is created, a Java `Future` object is returned. And use ExecutorService to submit the tasks.
 
 [./Json/XML.java](https://github.com/tonychen257/SWE262P-project/blob/main/src/main/java/org/json/XML.java)
@@ -174,7 +176,26 @@ public static Future<JSONObject> toJSONObjectM5(Reader reader) {
     executorService.shutdown();
     return objectFuture;
 }
+
+static ExecutorService pool = Executors.newCachedThreadPool();
+
+public static void toJSONObjectAsync(Reader reader, Function f, Function exp) throws ExecutionException, InterruptedException {
+    pool.execute(() -> {
+        try {
+            System.out.println("Start processing " + Thread.currentThread().getName());
+            JSONObject obj = toJSONObject(reader);
+            f.apply(obj);
+            System.out.println("Done processing " + Thread.currentThread().getName());
+        } catch (Exception e) {
+            exp.apply(e);
+        }
+    });
+}
 ```
+
+### Without Future
+
+We try to use [Thread Pools](https://www.javatpoint.com/java-thread-pool) to solve this asynchronous problem. We know that there might be Deadlock, Thread Leakage and Resource Thrashing problem. The cons is that we don't know when the task will end.
 
 ## Unit Test
 
@@ -183,8 +204,12 @@ public void testAsyncJSONKeyTransform() throws Exception {}
 public void testAsyncJSON() throws Exception {}
 public void testAsyncJSONKeyTransformWithJSONException() throws Exception{}
 public void testAsyncJSONWithWriter() throws Exception {}
+public void testJSONObjectAsync() throws Exception {}
+public void testJSONObjectAsyncWithTwo() throws Exception {}
+public void testJSONObjectAsyncWithException() throws Exception {}
 ```
 
 ## Performance
 
 In Java, when we declare a field `static`, exactly a single copy of that field is created and shared among all instances of that class. We creates an `Executor` that uses a single worker thread operating off an unbounded queue.
+

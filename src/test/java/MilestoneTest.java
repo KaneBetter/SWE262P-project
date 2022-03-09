@@ -234,4 +234,80 @@ public class MilestoneTest {
             System.out.println(e);
         }
     }
+
+    @Test
+    public void testJSONObjectAsync() throws IOException, ExecutionException, InterruptedException {
+        BufferedReader br = new BufferedReader(new FileReader("./src/books.xml"));
+
+        Function<JSONObject, String> f1 = (JSONObject jo) -> {
+            System.out.println("Start writing!");
+            try {
+                Writer writer = new FileWriter("./src/book.json");
+                jo.write(writer);
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        };
+
+        Function<Exception, String> exp = (Exception e) -> {System.out.println(e); return null;};
+        XML.toJSONObjectAsync(br, f1, exp);
+        System.out.println("Wait process to finish, Non blocking");
+        Thread.sleep(1000);
+    }
+
+    @Test
+    public void testJSONObjectAsyncWithTwo() throws IOException, ExecutionException, InterruptedException {
+        BufferedReader br1 = new BufferedReader(new FileReader("./src/books.xml"));
+        BufferedReader br2 = new BufferedReader(new FileReader("./src/books.xml"));
+        Function<JSONObject, String> f1 = (JSONObject jo) -> {
+            System.out.println("Start writing!");
+            try {
+                Writer writer = new FileWriter("./src/book1.json");
+                jo.write(writer);
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        };
+        Function<JSONObject, String> f2 = (JSONObject jo) -> {
+            System.out.println("Start writing!");
+            try {
+                Writer writer = new FileWriter("./src/book2.json");
+                jo.write(writer);
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        };
+        Function<Exception, String> exp = (Exception e) -> {System.out.println(e); return null;};
+        XML.toJSONObjectAsync(br1, f1, exp);
+        XML.toJSONObjectAsync(br2, f2, exp);
+        System.out.println("Wait process to finish, Non blocking");
+        Thread.sleep(1000);
+    }
+
+    @Test
+    public void testJSONObjectAsyncWithException() throws IOException, ExecutionException, InterruptedException {
+        BufferedReader br1 = new BufferedReader(new FileReader("./src/books1.xml"));
+
+        Function<JSONObject, String> f1 = (JSONObject jo) -> {
+            System.out.println("Start writing!");
+            try {
+                Writer writer = new FileWriter("./src/book1.json");
+                jo.write(writer);
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        };
+        Function<Exception, String> exp = (Exception e) -> {System.out.println(e); return null;};
+        XML.toJSONObjectAsync(br1, f1, exp);
+        System.out.println("Wait process to finish, Non blocking");
+        Thread.sleep(1000);
+    }
 }
