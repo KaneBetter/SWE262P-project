@@ -1,5 +1,21 @@
 > Group Member: Kaiqin Chen, Ruiyan Ma
 
+# Build
+
+```shell
+echo "Compiling json.jar..."
+cd /Users/chenkaiqin/Documents/GitHub/SWE262P-project/src/main/java
+javac org/json/*.java
+jar cfv json-java.jar org/json/*.class
+find . -name '*.class' -delete
+
+
+echo "Compile a program that uses the jar"
+javac -cp .:json-java.jar Test.java
+echo "Run the Test file"
+java Test
+```
+
 # SWE262P Milestone1
 
 - [Link](https://github.com/tonychen257/SWE262P-project/blob/main/Milestone1/src/M1/README.md)
@@ -61,6 +77,8 @@ For the task1, we manage to stop recursive when we find the sub object, we think
 
 ## Implement thoughts
 
+Add an overloaded static method to the XML class with the signature.
+
 - Add two more function
 
 ```java
@@ -110,7 +128,7 @@ We will try to rewrite milestone2's unit test in the future with `Junit` to main
 
 We think for the milestone3 we did a lot of improvement in the performance. For this mission, we always need to traverse the whole XML. However, in milestone1, we need to do it twice. First we traverse to get the XML to JSON, and then the client need do another traverse to change the key.
 
-In the milestone3, by using of Functions provided by JAVA 8 and the lambda expressions, we made the retrvise only happen once. For detail implementation, we built our function on the top of the original parse function with little adjustments.
+In the milestone3, by using of Functions provided by JAVA 8 and the lambda expressions, we made the reverse only happen once. For detail implementation, we built our function on the top of the original parse function with little adjustments.
 
 # SWE262P Milestone4
 
